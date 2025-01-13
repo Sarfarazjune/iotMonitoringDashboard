@@ -1,82 +1,61 @@
-// import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-// const SensorChart = () => {
-//   return (
-//     <div>
-//       <h3>Sensor Chart</h3>
-//     </div>
-//   );
-// };
-
-// export default SensorChart;
-import React, { useEffect, useRef } from 'react';
-import Chart from 'chart.js/auto';
-
-function SensorChart() {
-  const chartRef = useRef(null);
+function IoTMonitor() {
+  const [temperature, setTemperature] = useState(23.00);
+  const [humidity, setHumidity] = useState(69.80);
+  const [soilMoisture, setSoilMoisture] = useState(4095);
+  const [tdsLevel, setTdsLevel] = useState(877.42);
+  const [pressure, setPressure] = useState(1013.59);
 
   useEffect(() => {
-    const ctx = chartRef.current.getContext('2d');
-    const sensorChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: Array.from({ length: 10 }, (_, i) => `T-${i}`),
-        datasets: [
-          {
-            label: 'Temperature (°C)',
-            data: Array(10).fill(0),
-            borderColor: 'rgba(255, 99, 132, 1)',
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            fill: true,
-          },
-          {
-            label: 'Humidity (%)',
-            data: Array(10).fill(0),
-            borderColor: 'rgba(54, 162, 235, 1)',
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            fill: true,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'top',
-          },
-        },
-        scales: {
-          x: {
-            beginAtZero: true,
-          },
-          y: {
-            beginAtZero: true,
-          },
-        },
-      },
-    });
-
     const interval = setInterval(() => {
-      sensorChart.data.datasets[0].data.shift();
-      sensorChart.data.datasets[0].data.push((20 + Math.random() * 10).toFixed(1));
-      sensorChart.data.datasets[1].data.shift();
-      sensorChart.data.datasets[1].data.push((40 + Math.random() * 20).toFixed(1));
-      sensorChart.update();
+      // Generate nearby values for each sensor reading
+      setTemperature(prev => (parseFloat((Math.random() * 0.2 + prev - 0.1).toFixed(2))));
+      setHumidity(prev => (parseFloat((Math.random() * 2 + prev - 1).toFixed(2))));
+      setSoilMoisture(4095); // Static value for soil moisture
+      setTdsLevel(prev => (parseFloat((Math.random() * 10 + prev - 5).toFixed(2))));
+      setPressure(prev => (parseFloat((Math.random() * 0.02 + prev - 0.01).toFixed(2))));
     }, 2000);
 
-    return () => {
-      clearInterval(interval);
-      sensorChart.destroy();
-    };
+    return () => clearInterval(interval);
   }, []);
 
   return (
-    <section id="sensor-chart" style={{ margin: '2rem auto', width: '90%', maxWidth: '800px', textAlign: 'center' }}>
-      <h2>Sensor Data Chart</h2>
-      <canvas ref={chartRef}></canvas>
+    <section id="iot-monitor" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', padding: '2rem' }}>
+      <div className="card" style={cardStyle}>
+        <h3>Soil Moisture</h3>
+        <p>{soilMoisture}</p>
+      </div>
+      <div className="card" style={cardStyle}>
+        <h3>Humidity</h3>
+        <p>{humidity.toFixed(2)} %</p>
+      </div>
+      <div className="card" style={cardStyle}>
+        <h3>Temperature</h3>
+        <p>{temperature.toFixed(2)} &deg;C</p>
+      </div>
+      <div className="card" style={cardStyle}>
+        <h3>Pressure</h3>
+        <p>{pressure.toFixed(2)} hPa</p>
+      </div>
+      <div className="card" style={cardStyle}>
+        <h3>TDS Level</h3>
+        <p>{tdsLevel.toFixed(2)} ppm</p>
+      </div>
     </section>
   );
 }
 
-export default SensorChart;
+const cardStyle = {
+  backgroundColor: 'white',
+  border: '1px solid #ddd',
+  borderRadius: '8px',
+  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+  margin: '0.5rem',
+  width: '250px',
+  height: '150px',
+  padding: '1rem',
+  textAlign: 'center',
+};
+
+export default IoTMonitor;
