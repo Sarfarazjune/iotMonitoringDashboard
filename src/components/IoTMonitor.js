@@ -1,46 +1,4 @@
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
 
-// function IoTMonitor() {
-//   const [sensorData, setSensorData] = useState({ temperature: [], humidity: [] });
-//   const [error, setError] = useState("");
-
-//   useEffect(() => {
-//     const fetchSensorData = async () => {
-//       try {
-//         const response = await axios.get("http://localhost:5000/api/sensors");
-//         setSensorData(response.data);
-//       } catch (err) {
-//         console.error(err);
-//         setError("Error fetching sensor data");
-//       }
-//     };
-
-//     fetchSensorData();
-
-//     // Optionally, fetch data every 5 seconds
-//     const interval = setInterval(fetchSensorData, 5000);
-//     return () => clearInterval(interval);
-//   }, []);
-
-//   return (
-//     <div>
-//       <h2>Live Sensor Data</h2>
-//       {error ? (
-//         <p style={{ color: "red" }}>{error}</p>
-//       ) : (
-//         <div>
-//           <p>Temperature: {sensorData.temperature.join(", ")}°C</p>
-//           <p>Humidity: {sensorData.humidity.join(", ")}%</p>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-
-// export default IoTMonitor;
-
-//3333333333333
 import React, { useState, useEffect } from 'react';
 
 function IoTMonitor() {
